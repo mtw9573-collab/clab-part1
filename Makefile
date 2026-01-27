@@ -1,10 +1,13 @@
 CC     := gcc
-CFLAGS := -Werror -std=gnu99 -g -Og
+CFLAGS := -Werror -std=gnu11 -g -Og
 
 
 OBJS := bitfloat.o ptr.o array.o clab_test.o
 
 all: clab_test
+
+submitfiles: 
+	zip submitfiles.zip *.c *.h Makefile
 
 clab_test: $(OBJS)
 	gcc $^ -o $@ 

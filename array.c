@@ -36,9 +36,18 @@ void bubble_sort(int *arr, int n)
   // TODO: Your code here.
 }
 
-//arr is a 4 byte array containing an integer in big endian format,
-//i.e. arr[0] has the most significant byte...
-//Convert the integer to little endian and return the converted int.
+// arr is a 4-byte array containing an integer stored in big-endian format,
+// i.e. arr[0] contains the most significant byte and arr[3] contains the
+// least significant byte.
+//
+// This function interprets the big-endian byte sequence and returns the
+// corresponding integer value. On a little-endian machine (like x86), this
+// effectively "converts" from big-endian to the native format.
+//
+// Example: if arr = {0x00, 0x01, 0x02, 0x03}, the function should return
+// 0x00010203 (decimal 66051).
+//
+// Hint: Use bit shifting and OR operations to combine the bytes.
 int big_to_little_endian(char *arr)
 {
   // TODO: Your code here.

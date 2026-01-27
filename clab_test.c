@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <strings.h>
 #include <stdbool.h>
 #include <getopt.h>
+#include <float.h>
+#include <time.h>
+
 
 #include "panic_cond.h"
 #include "bitfloat.h"
@@ -26,15 +30,15 @@ void TestBitFloat()
   }
   printf("passed\n");
 
-  printf("      set_bit_at_pos...");
-  n = 0;
+  printf("      flip_bit_at_pos...");
   for (int p = 0; p < sizeof(n)*8; p++) {
-    int r = set_bit_at_pos(n, p);
-    panic_cond(r == (n<<1)+1,
+    n = rand();
+    n &= ~(1 << p);
+    unsigned nout = n | (1<<p);
+    int r = flip_bit_at_pos(n, p);
+    panic_cond(r == nout,
         "Setting bit at pos %d of int %x should be %x (returned %x)",
-        p, n, (n<<1)+1, r);
-
-    n = (n << 1) + 1;
+        p, n, nout, r);
   }
   printf("passed\n");
 
@@ -85,19 +89,45 @@ void TestBitFloat()
         f, *(int *)&f, (-1)*(i+1)+127, r);
   }
   printf("passed\n");
-
   printf("---Test bitfloat.c Passed\n");  
 }
+
+void TestBonus()
+{
+  printf("---Start testing bonus problem in bitfloat.c\n");  
+  printf("      get_precision...");
+  float fmin = FLT_TRUE_MIN;
+  float p = fmin;
+  for (unsigned int i = 0; i < 254; i++) {
+    unsigned fi = *(int *)&fmin;
+    fi |= (i << 23);
+    float f = *(float *)&fi;
+    float m = (rand() % 100)/100.0 + 1.0;
+    float input = m*f;
+    float r = get_precision(input); 
+    panic_cond(r>p?(r-p)<= FLT_TRUE_MIN:(p-r)<=FLT_TRUE_MIN,
+      "i=%d float %E (bit pattern %08x) precision should be %E %08x (returned %E %08x)",
+      i, input, *(int *)&input, p, *(unsigned int *)&p, r, *(unsigned int *)&r);
+    if (i >=1)
+      p = p*2.0;
+
+  }
+  printf("passed\n");
+  printf("---Test bonus problem in bitfloat.c Passed\n");  
+}
+
 
 void TestPtr()
 {
   printf("---Start testing ptr.c\n");  
 
-  printf("      set_to_five...");
-  int v = 0;
-  set_to_five(&v);
-  panic_cond(v == 5, "x=%d, after set_to_five v should be %d instead of %d",
-      0, 5, v);
+  printf("      incr...");
+  for (int i = 0; i < 10; i++) {
+    int v = i;
+    incr(&v);
+    panic_cond(v == (i+1), "v=%d, after incr v should be %d instead of %d",
+      i, i+1, v);
+  }
   printf("passed\n");
 
   printf("      initialize_ptr...");
@@ -177,16 +207,22 @@ typedef void (*TestFunc)();
 
 int main(int argc, char **argv)
 {
-#define NUM_TESTS 3
-	TestFunc fs[NUM_TESTS]= {TestBitFloat, TestPtr, TestArray};
+#define NUM_TESTS 4
+	TestFunc fs[NUM_TESTS]= {TestBitFloat, TestPtr, TestArray, TestBonus};
 
+  struct timespec ts;
+  clock_gettime(CLOCK_REALTIME, &ts);
+  srand(ts.tv_nsec);
 	int which_test = 0;
 	int c;
-	while ((c = getopt(argc, argv, "t:")) != -1) {
+	while ((c = getopt(argc, argv, "t:s:")) != -1) {
 		switch (c) {
 			case 't':
 				which_test = atoi(optarg);
 				break;
+      case 's':
+        srand(atoi(optarg));
+        break;
     }
   }
   for (int i = 0; i < NUM_TESTS; i++) {
