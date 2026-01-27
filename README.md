@@ -39,9 +39,3 @@ Before starting, you should be familiar with:
 - Bitwise operators: `&`, `|`, `^`, `~`, `<<`, `>>`
 - How arrays are represented in memory
 
-## Useful References
-
-- [Bitwise Operations in C](https://en.wikipedia.org/wiki/Bitwise_operations_in_C)
-- [IEEE 754 Floating Point](https://en.wikipedia.org/wiki/IEEE_754)
-- [Endianness](https://en.wikipedia.org/wiki/Endianness)
-- [Bubble Sort Algorithm](https://en.wikipedia.org/wiki/Bubble_sort)
