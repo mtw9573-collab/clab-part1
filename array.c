@@ -44,7 +44,7 @@ void bubble_sort(int *arr, int n)
   for (int i = 0; i < n-1; i++) {
     for (int j = 0; j < n-1-i; j++) {
       if (arr[j] > arr[j+1]) {
-        swap_int(&arr[j], *arr[j+1]);
+        swap_int(&arr[j], &arr[j+1]);
       }
     }
   }
@@ -65,6 +65,6 @@ void bubble_sort(int *arr, int n)
 int big_to_little_endian(char *arr)
 {
   // TODO: Your code here.
-  return ((unsigned char)arr[0] << 24 | ((unsigned char)arr[1] << 16) | ((unsigned char)arr[2] << 8) | ((unsigned char)arr[3]);
+  return ((unsigned char)arr[0] << 24) | ((unsigned char)arr[1] << 16) | ((unsigned char)arr[2] << 8) | ((unsigned char)arr[3]);
 }
 
