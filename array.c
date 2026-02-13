@@ -13,6 +13,11 @@
 int array_sum(int *arr, int n)
 {
   // TODO: Your code here.
+  int sum = 0;
+  for (int i = 0; i < n; i++) {
+    sum += arr[i];
+  }
+  return sum;
 }
 
 // Copy the first n elements of array "src" into array "dst".
@@ -21,7 +26,9 @@ int array_sum(int *arr, int n)
 void array_cpy(int *dst, int *src, int n)
 {
   // TODO: Your code here.
-
+  for (int i = 0; i < n; i++) {
+    dst[i] = src[i];
+  }
 }
 
 // bubble_sort implements the bubble sort algorithm.
@@ -34,6 +41,13 @@ void array_cpy(int *dst, int *src, int n)
 void bubble_sort(int *arr, int n)
 {
   // TODO: Your code here.
+  for (int i = 0; i < n-1; i++) {
+    for (int j = 0; j < n-1-i; j++) {
+      if (arr[j] > arr[j+1]) {
+        swap_int(&arr[j], *arr[j+1]);
+      }
+    }
+  }
 }
 
 // arr is a 4-byte array containing an integer stored in big-endian format,
@@ -51,6 +65,6 @@ void bubble_sort(int *arr, int n)
 int big_to_little_endian(char *arr)
 {
   // TODO: Your code here.
-
+  return ((unsigned char)arr[0] << 24 | ((unsigned char)arr[1] << 16) | ((unsigned char)arr[2] << 8) | ((unsigned char)arr[3]);
 }
 
